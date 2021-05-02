@@ -113,6 +113,11 @@ const loadingImageDWT = () => {
     fileInput.addEventListener('change', function(e) {
         const reader = new FileReader();
         reader.onload = () => {
+            eel.DWT(reader.result)(() => {
+                document.querySelector(classImageDWT1).innerHTML = '<img src="images-result/image-level1.png">';
+                document.querySelector(classImageDWT2).innerHTML = '<img src="images-result/image-level2.png">';
+                document.querySelector(classImageDWT3).innerHTML = '<img src="images-result/image-level3.png">';
+            });
         }
         reader.readAsDataURL(fileInput.files[0]);
     });
@@ -144,6 +149,12 @@ const loadingImageAggregation = (level) => {
                     src2 = img2.src;
                     imageContainer2.innerHTML = "";
                     imageContainer2.append(img2);
+        
+                    document.querySelector(buttonMain).addEventListener('click', () => {
+                        eel.aggregation(src1, src2, level)(() => {
+                            imageContainer3.innerHTML = '<img src="images-result/image-aggregation.png">';
+                        });
+                    })
                 }
                 reader2.readAsDataURL(fileInput2.files[0]);
             });
@@ -179,6 +190,19 @@ const loadingMetrics = () => {
                     src2 = img2.src;
                     imageContainer2.innerHTML = "";
                     imageContainer2.append(img2);
+        
+                    document.querySelector(buttonMain).addEventListener('click', () => {
+                        eel.ssim(src1, src2)((value) => {
+                            ssim.innerHTML = `
+                                Значение метрики SSIM = ${value} между исходной картинкой и комплексированной
+                            `;
+                        });
+                        eel.psnr(src1, src2)((value) => {
+                            psnr.innerHTML = `
+                                Значение метрики PSNR = ${value} между исходной картинкой и комплексированной
+                            `;
+                        });
+                    })
                 }
                 reader2.readAsDataURL(fileInput2.files[0]);
             });
